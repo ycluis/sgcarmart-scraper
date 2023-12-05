@@ -1,6 +1,7 @@
 const fs = require("fs");
 const axios = require("axios");
 const cheerio = require("cheerio");
+const ExcelJS = require("exceljs");
 
 const info = "https://www.sgcarmart.com/used_cars/";
 
@@ -39,10 +40,31 @@ axios
             "td > table > tbody > tr > td:nth-child(6) > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td.font_red > div"
           )
           .text()
-          .trim();
+          .trim()
+          .replace(",", "");
         const status = $(element)
           .find(
             "td > table > tbody > tr > td:nth-child(6) > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td:nth-child(16) > div > strong > font"
+          )
+          .text()
+          .trim();
+        const depreciation = $(element)
+          .find(
+            "td > table > tbody > tr > td:nth-child(6) > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td:nth-child(6) > div"
+          )
+          .text()
+          .trim()
+          .replace(",", "");
+        const mileage = $(element)
+          .find(
+            "td > table > tbody > tr > td:nth-child(6) > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td:nth-child(12) > div"
+          )
+          .text()
+          .trim()
+          .replace(",", "");
+        const regDate = $(element)
+          .find(
+            "td > table > tbody > tr > td:nth-child(6) > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td:nth-child(8) > div"
           )
           .text()
           .trim();
@@ -52,30 +74,59 @@ axios
           price,
           status,
           link: `${info}${href}`,
+          depreciation,
+          mileage,
+          regDate,
         };
 
         if (href !== undefined) {
           data.push(row);
         }
-
-        console.log(
-          `Row ${
-            index + 1
-          } Name: ${name} Price: ${price} Status: ${status} Link: ${info}${href}`
-        );
       });
 
       // Write data to CSV file
       const csvData = data
-        .map((row) => `${row.name},${row.price},${row.status},${row.link}`)
+        .map(
+          (row) =>
+            `${row.name},${row.price},${row.status},${row.link},${row.depreciation},${row.mileage},${row.regDate}`
+        )
         .join("\n");
 
       fs.writeFileSync(
         "output.csv",
-        "Name,Price,Status,Link\n" + csvData,
+        "Name,Price,Status,Link,Depreciation,Mileage,Reg Date\n" + csvData,
         "utf-8"
       );
       console.log("Data has been written to output.csv");
+
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("Sheet1");
+
+      worksheet.addRow([
+        "Name",
+        "Price",
+        "Status",
+        "Link",
+        "Depreciation",
+        "Mileage",
+        "Reg Date",
+      ]);
+
+      data.forEach((row) => {
+        worksheet.addRow([
+          row.name,
+          row.price,
+          row.status,
+          row.link,
+          row.depreciation,
+          row.mileage,
+          row.regDate,
+        ]);
+      });
+
+      workbook.xlsx.writeFile("output.xlsx").then(() => {
+        console.log("Data has been written to output.xlsx");
+      });
     } else {
       console.log("Failed to fetch the website");
     }
