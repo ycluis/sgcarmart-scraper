@@ -4,6 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "node app",
+    "format": "prettier --write \"*.js\"",
+    "lint": "eslint \"*.js\" --quiet",
     "commit": "cz"
   },
   "keywords": [],
@@ -15,7 +18,10 @@
     "exceljs": "^4.4.0"
   },
   "devDependencies": {
-    "cz-conventional-changelog": "^3.3.0"
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.1.0"
   },
   "config": {
     "commitizen": {

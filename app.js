@@ -10,20 +10,20 @@ const getCarDetails = async (link) => {
 
     const name = $("#toMap > div > a").text().trim();
     const price = $(
-      "#carInfo > tbody > tr:nth-child(1) > td.font_red > a > strong"
+      "#carInfo > tbody > tr:nth-child(1) > td.font_red > a > strong",
     )
       .text()
       .trim()
       .replace(",", "");
     const depreciation = $(
-      "#carInfo > tbody > tr:nth-child(2) > td:nth-child(2)"
+      "#carInfo > tbody > tr:nth-child(2) > td:nth-child(2)",
     )
       .text()
       .trim()
       .replace(/\/yr.*/, "/yr")
       .replace(",", "");
     const coe = $(
-      "#carInfo > tbody > tr:nth-child(3) > td:nth-child(1) > div:nth-child(4) > div.row_info"
+      "#carInfo > tbody > tr:nth-child(3) > td:nth-child(1) > div:nth-child(4) > div.row_info",
     )
       .text()
       .trim()
@@ -32,13 +32,13 @@ const getCarDetails = async (link) => {
       .text()
       .trim();
     const mileage = $(
-      "#carInfo > tbody > tr:nth-child(3) > td:nth-child(1) > div:nth-child(1) > div.row_info"
+      "#carInfo > tbody > tr:nth-child(3) > td:nth-child(1) > div:nth-child(1) > div.row_info",
     )
       .text()
       .trim()
       .replace(",", "");
     const noOwners = $(
-      "#carInfo > tbody > tr:nth-child(3) > td:nth-child(2) > div:nth-child(7) > div.row_info"
+      "#carInfo > tbody > tr:nth-child(3) > td:nth-child(2) > div:nth-child(7) > div.row_info",
     )
       .text()
       .trim();
@@ -54,7 +54,7 @@ const getCarDetails = async (link) => {
       noOwners:
         noOwners === ""
           ? $(
-              "#carInfo > tbody > tr:nth-child(3) > td:nth-child(2) > div:nth-child(6) > div.row_info"
+              "#carInfo > tbody > tr:nth-child(3) > td:nth-child(2) > div:nth-child(6) > div.row_info",
             )
               .text()
               .trim()
@@ -69,7 +69,7 @@ const writeToCsv = (data) => {
   const csvData = data
     .map(
       (row) =>
-        `${row.name},${row.price},${row.link},${row.depreciation},${row.coe},${row.mileage},${row.regDate},${row.noOwners}`
+        `${row.name},${row.price},${row.link},${row.depreciation},${row.coe},${row.mileage},${row.regDate},${row.noOwners}`,
     )
     .join("\n");
 
@@ -77,7 +77,7 @@ const writeToCsv = (data) => {
     "output.csv",
     "Name,Price,Link,Depreciation,COE,Mileage,Reg Date,No of Owners\n" +
       csvData,
-    "utf-8"
+    "utf-8",
   );
   console.log("Data has been written to output.csv");
 };

@@ -14,6 +14,7 @@ const getCarLink = async () => {
 
       const filteredRows = body
         .slice(3)
+        // eslint-disable-next-line no-unused-vars
         .filter((index, _) => index === 0 || index % 2 === 0);
 
       filteredRows.each((_, element) => {
