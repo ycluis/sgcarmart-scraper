@@ -23,7 +23,6 @@ const getCarLink = async () => {
     }
   } catch (err) {
     console.log("Error in web service: ", err);
-    process.exit(1);
   }
 };
 

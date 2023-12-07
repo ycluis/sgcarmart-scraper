@@ -1,6 +1,11 @@
 const fs = require("fs");
+const ora = require("ora");
+const spinners = require("cli-spinners");
 const getCarDetails = require("./getCarDetails");
 const getCarLink = require("./getCarLink");
+
+const spinner = ora();
+spinner.spinner = spinners.line;
 
 const writeToCsv = (data) => {
   const csvData = data
@@ -16,19 +21,25 @@ const writeToCsv = (data) => {
       csvData,
     "utf-8",
   );
-  console.log("Data has been written to output.csv");
+  spinner.succeed(`Data has been written to output.csv`);
 };
 
 (async () => {
-  console.log("Processing...");
+  try {
+    spinner.start("Processing...");
 
-  const links = await getCarLink();
-  const data = [];
+    const links = await getCarLink();
+    const data = [];
 
-  for (const link of links) {
-    const row = await getCarDetails(link);
-    data.push(row);
+    for (const link of links) {
+      const row = await getCarDetails(link);
+      data.push(row);
+    }
+
+    writeToCsv(data);
+  } catch (err) {
+    console.log(err);
+    spinner.fail(err);
+    process.exit(1);
   }
-
-  writeToCsv(data);
 })();

@@ -8,7 +8,6 @@ const getCarDetails = async (link) => {
     const $ = cheerio.load(res.data);
 
     const carContent = getCarContent($);
-
     const name = carContent.getName($);
     const price = carContent.getPrice($);
     const depreciation = carContent.getDepre($);
