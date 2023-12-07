@@ -2,46 +2,22 @@ const fs = require("fs");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const getCarLink = require("./getCarLink");
+const getCarContent = require("./getCarContent");
 
 const getCarDetails = async (link) => {
   try {
     const res = await axios.get(link);
     const $ = cheerio.load(res.data);
 
-    const name = $("#toMap > div > a").text().trim();
-    const price = $(
-      "#carInfo > tbody > tr:nth-child(1) > td.font_red > a > strong",
-    )
-      .text()
-      .trim()
-      .replace(",", "");
-    const depreciation = $(
-      "#carInfo > tbody > tr:nth-child(2) > td:nth-child(2)",
-    )
-      .text()
-      .trim()
-      .replace(/\/yr.*/, "/yr")
-      .replace(",", "");
-    const coe = $(
-      "#carInfo > tbody > tr:nth-child(3) > td:nth-child(1) > div:nth-child(4) > div.row_info",
-    )
-      .text()
-      .trim()
-      .replace(",", "");
-    const regDate = $("#carInfo > tbody > tr:nth-child(2) > td:nth-child(4)")
-      .text()
-      .trim();
-    const mileage = $(
-      "#carInfo > tbody > tr:nth-child(3) > td:nth-child(1) > div:nth-child(1) > div.row_info",
-    )
-      .text()
-      .trim()
-      .replace(",", "");
-    const noOwners = $(
-      "#carInfo > tbody > tr:nth-child(3) > td:nth-child(2) > div:nth-child(7) > div.row_info",
-    )
-      .text()
-      .trim();
+    const carContent = getCarContent($);
+
+    const name = carContent.getName($);
+    const price = carContent.getPrice($);
+    const depreciation = carContent.getDepre($);
+    const coe = carContent.getCoe($);
+    const mileage = carContent.getMileage($);
+    const regDate = carContent.getRegDate($);
+    const noOwners = carContent.getOwners($);
 
     return {
       name,

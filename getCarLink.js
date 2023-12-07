@@ -10,18 +10,10 @@ const getCarLink = async () => {
       const html = res.data;
       const $ = cheerio.load(html);
 
-      const body = $("#contentblank > table > tbody > tr");
-
-      const filteredRows = body
-        .slice(3)
-        // eslint-disable-next-line no-unused-vars
-        .filter((index, _) => index === 0 || index % 2 === 0);
-
-      filteredRows.each((_, element) => {
-        const href = $(element).find("#Frame > a").attr("href");
-
-        if (href !== undefined) {
-          links.push(`${urls.link}${href}`);
+      $("strong").each((_, element) => {
+        const link = $(element).find("a");
+        if (link.attr("href") && link.attr("href").includes("info")) {
+          links.push(`${urls.link}${link.attr("href")}`);
         }
       });
 
